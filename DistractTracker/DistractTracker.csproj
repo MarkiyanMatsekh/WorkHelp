@@ -52,7 +52,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DistractTracker.cs" />
+    <Compile Include="Trackers\DistractTrackerBase.cs" />
+    <Compile Include="Trackers\DistractTrackerManager.cs" />
+    <Compile Include="Trackers\IdleTracker.cs" />
+    <Compile Include="Trackers\LockTracker.cs" />
     <Compile Include="TrayIcon.cs">
       <SubType>Form</SubType>
     </Compile>

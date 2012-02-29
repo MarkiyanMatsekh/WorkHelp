@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using DistractTracker.Trackers;
 using Microsoft.Win32;
 
 namespace DistractTracker
@@ -18,7 +19,7 @@ namespace DistractTracker
 
         private readonly NotifyIcon _trayIcon;
         private readonly ContextMenu _trayMenu;
-        private readonly DistractTracker _tracker = new DistractTracker();
+        private readonly DistractTrackerManager _tracker = new DistractTrackerManager();
 
 
         public TrayIcon()
