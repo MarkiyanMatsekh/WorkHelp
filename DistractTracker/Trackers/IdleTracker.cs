@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using EdinDazdarevic;
 
 namespace DistractTracker.Trackers
 {
@@ -17,7 +16,7 @@ namespace DistractTracker.Trackers
 
         private const int MaxIdleTime = 30; // seconds
         private readonly CancelScreenshotDelegate _cancelScreenshotDelegate;
-        private readonly SystemIdleTimer  _idleTimer = new SystemIdleTimer();
+        private readonly SystemIdleTimer.SystemIdleTimer  _idleTimer = new SystemIdleTimer.SystemIdleTimer();
 
         protected override string ActionName
         {

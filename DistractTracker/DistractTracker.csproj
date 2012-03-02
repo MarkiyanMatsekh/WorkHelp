@@ -34,9 +34,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\LockTracker.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\DistractTracker.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,11 +56,13 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="SystemIdleTimer">
-      <HintPath>Lib\SystemIdleTimer.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SystemIdleTimer\IdleEventArgs.cs" />
+    <Compile Include="SystemIdleTimer\SystemIdleTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SystemIdleTimer\Win32Wrapper.cs" />
     <Compile Include="Trackers\DistractTrackerBase.cs" />
     <Compile Include="Trackers\DistractTrackerManager.cs" />
     <Compile Include="Trackers\IdleTracker.cs" />
@@ -82,7 +93,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\LockTracker.ico" />
+    <None Include="Resources\DistractTracker.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using DistractTracker.Trackers;
 using Microsoft.Win32;
@@ -21,7 +22,6 @@ namespace DistractTracker
         private readonly ContextMenu _trayMenu;
         private readonly DistractTrackerManager _tracker = new DistractTrackerManager();
 
-
         public TrayIcon()
         {
             _trayMenu = new ContextMenu();
@@ -38,7 +38,7 @@ namespace DistractTracker
 
         protected override void OnLoad(EventArgs e)
         {
-            Visible = false; 
+            Visible = false;
             ShowInTaskbar = false;
 
             _tracker.Init();

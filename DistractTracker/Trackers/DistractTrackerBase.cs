@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Threading;
-using EdinDazdarevic;
 using Microsoft.Win32;
 
 namespace DistractTracker.Trackers
@@ -37,17 +36,25 @@ namespace DistractTracker.Trackers
 
         protected void EndAwayPeriod()
         {
-            File.AppendAllText(LogFileName, String.Format("Back from {0} at {1}. ", ActionName,
+            File.AppendAllText(LogFileName, String.Format("Back from {0} at {1}. ",
+                                                           ActionName,
                                                            DateTime.Now.ToString("HH:mm:ss")));
             IsAway = false;
             var awayTime = DateTime.Now - LeaveTime;
+            
+            if (!OnBeforeTakingScreenshot())
+            {
+                File.AppendAllText(LogFileName, @"Screenshot canceled. ");
+                return;
+            }
+            if (awayTime.Minutes > 0)
+            {
+                TakeScreenshot(awayTime);
+                File.AppendAllText(LogFileName, @"Screenshot taken. ");
+            }
 
-            if (awayTime.Minutes < 1) return; // skip short leaves
-            if (!OnBeforeTakingScreenshot()) return;
-
-            TakeScreenshot(awayTime);
-
-            File.AppendAllText(LogFileName, String.Format("Screenshot Taken. Away time = {0}{1}", awayTime.ToString("c"), Environment.NewLine));
+            // notify the end of away period
+            File.AppendAllText(LogFileName, String.Format("Away time = {0}{1}", awayTime.ToString("c"), Environment.NewLine));
         }
 
         protected virtual void SetLeaveTime()
