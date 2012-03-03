@@ -7,14 +7,14 @@ using System.Timers;
 
 namespace DistractTracker.SystemIdleTimer
 {
-    public class SystemIdleTimer : Component
+    public class SystemIdleTimer
     {
-        private static List<WeakReference> __ENCList = new List<WeakReference>();
-        private const double INTERNAL_TIMER_INTERVAL = 550.0;
-        private bool m_IsIdle;
-        private object m_LockObject;
-        private int m_MaxIdleTime;
-        private Timer ticker;
+        private static readonly List<WeakReference> EncList = new List<WeakReference>();
+        private const double InternalTimerInterval = 550.0;
+        private bool _isIdle;
+        private int _maxIdleTime;
+        private readonly object _lockObject;
+        private readonly Timer _ticker;
 
         [Description("Event that if fired when idle state is entered.")]
         public event OnEnterIdleStateEventHandler OnEnterIdleState;
@@ -24,28 +24,28 @@ namespace DistractTracker.SystemIdleTimer
 
         public SystemIdleTimer()
         {
-            List<WeakReference> list = __ENCList;
+            List<WeakReference> list = EncList;
             lock (list)
             {
-                __ENCList.Add(new WeakReference(this));
+                EncList.Add(new WeakReference(this));
             }
-            this.m_IsIdle = false;
-            this.m_LockObject = RuntimeHelpers.GetObjectValue(new object());
-            this.ticker = new Timer(550.0);
-            this.ticker.Elapsed += new ElapsedEventHandler(this.InternalTickerElapsed);
+            this._isIdle = false;
+            this._lockObject = RuntimeHelpers.GetObjectValue(new object());
+            this._ticker = new Timer(InternalTimerInterval);
+            this._ticker.Elapsed += new ElapsedEventHandler(this.InternalTickerElapsed);
         }
 
         private void InternalTickerElapsed(object sender, ElapsedEventArgs e)
         {
             if (Win32Wrapper.GetIdle() > (this.MaxIdleTime * 0x3e8L))
             {
-                if (!this.m_IsIdle)
+                if (!this._isIdle)
                 {
-                    object lockObject = this.m_LockObject;
+                    object lockObject = this._lockObject;
                     ObjectFlowControl.CheckForSyncLockOnValueType(lockObject);
                     lock (lockObject)
                     {
-                        this.m_IsIdle = true;
+                        this._isIdle = true;
                     }
                     IdleEventArgs args = new IdleEventArgs(e.SignalTime);
                     OnEnterIdleStateEventHandler onEnterIdleStateEvent = this.OnEnterIdleState;
@@ -55,13 +55,13 @@ namespace DistractTracker.SystemIdleTimer
                     }
                 }
             }
-            else if (this.m_IsIdle)
+            else if (this._isIdle)
             {
-                object expression = this.m_LockObject;
+                object expression = this._lockObject;
                 ObjectFlowControl.CheckForSyncLockOnValueType(expression);
                 lock (expression)
                 {
-                    this.m_IsIdle = false;
+                    this._isIdle = false;
                 }
                 IdleEventArgs args2 = new IdleEventArgs(e.SignalTime);
                 OnExitIdleStateEventHandler onExitIdleStateEvent = this.OnExitIdleState;
@@ -74,17 +74,17 @@ namespace DistractTracker.SystemIdleTimer
 
         public void Start()
         {
-            this.ticker.Start();
+            this._ticker.Start();
         }
 
         public void Stop()
         {
-            this.ticker.Stop();
-            object lockObject = this.m_LockObject;
+            this._ticker.Stop();
+            object lockObject = this._lockObject;
             ObjectFlowControl.CheckForSyncLockOnValueType(lockObject);
             lock (lockObject)
             {
-                this.m_IsIdle = false;
+                this._isIdle = false;
             }
         }
 
@@ -92,7 +92,7 @@ namespace DistractTracker.SystemIdleTimer
         {
             get
             {
-                return this.ticker.Enabled;
+                return this._ticker.Enabled;
             }
         }
 
@@ -101,15 +101,15 @@ namespace DistractTracker.SystemIdleTimer
         {
             get
             {
-                return (uint) this.m_MaxIdleTime;
+                return (uint)this._maxIdleTime;
             }
             set
             {
-                if (value == 0L)
+                if (value == 0)
                 {
                     throw new ArgumentException("MaxIdleTime must be larger then 0.");
                 }
-                this.m_MaxIdleTime = (int) value;
+                this._maxIdleTime = (int)value;
             }
         }
 

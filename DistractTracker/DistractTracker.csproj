@@ -58,10 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SystemIdleTimer\SystemIdleTimer.cs" />
     <Compile Include="SystemIdleTimer\IdleEventArgs.cs" />
-    <Compile Include="SystemIdleTimer\SystemIdleTimer.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="SystemIdleTimer\Win32Wrapper.cs" />
     <Compile Include="Trackers\DistractTrackerBase.cs" />
     <Compile Include="Trackers\DistractTrackerManager.cs" />
